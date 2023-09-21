@@ -19,7 +19,7 @@ import io.seata.rm.datasource.SqlGenerateUtils;
 import io.seata.sqlparser.SQLType;
 import io.seata.rm.datasource.sql.struct.Field;
 import io.seata.rm.datasource.sql.struct.Row;
-import io.seata.rm.datasource.sql.struct.TableMeta;
+import io.seata.sqlparser.struct.TableMeta;
 import io.seata.rm.datasource.sql.struct.TableRecords;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -210,6 +210,8 @@ public class AbstractUndoExecutorTest extends BaseH2Test {
 
         String sql=SqlGenerateUtils.buildWhereConditionByPKs(pkNameList,pkRowValues.get("id1").size(),"mysql");
         Assertions.assertEquals("(id1,id2) in ( (?,?),(?,?),(?,?) )",sql);
+        sql=SqlGenerateUtils.buildWhereConditionByPKs(pkNameList,pkRowValues.get("id1").size(),"mariadb");
+        Assertions.assertEquals("(id1,id2) in ( (?,?),(?,?),(?,?) )",sql);
     }
 
     @Test
@@ -225,6 +227,8 @@ public class AbstractUndoExecutorTest extends BaseH2Test {
         pkRowValues.put("id1",pkId1Values);
 
         String sql=SqlGenerateUtils.buildWhereConditionByPKs(pkNameList,pkRowValues.get("id1").size(),"mysql");
+        Assertions.assertEquals("(id1) in ( (?) )",sql);
+        sql=SqlGenerateUtils.buildWhereConditionByPKs(pkNameList,pkRowValues.get("id1").size(),"mariadb");
         Assertions.assertEquals("(id1) in ( (?) )",sql);
     }
 }
